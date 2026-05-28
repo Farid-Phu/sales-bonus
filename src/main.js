@@ -61,7 +61,23 @@ products_sold: {}
 }
 })
 
-    // @TODO: Индексация продавцов и товаров для быстрого доступа
+    // Индексация продавцов и товаров для быстрого доступа
+
+const sellerIndex = {}
+sellerStats.forEach(seller => {
+sellerIndex[seller.id] = seller
+}
+)
+
+const productIndex = {}
+data.products.forEach(product => {
+productIndex[product.sku] = product
+}
+)
+
+
+
+console.log(productIndex);
 
     // @TODO: Расчет выручки и прибыли для каждого продавца
 
