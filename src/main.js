@@ -19,6 +19,15 @@ return revenue
  */
 function calculateBonusByProfit(index, total, seller) {
    const { profit } = seller;
+   if (index === 0) {
+    return profit * 0.15;
+} else if (index === 1 || index === 2) {
+    return profit * 0.10;
+} else if (index === total - 1) {
+    return 0;
+} else {
+    return profit * 0.05;
+}
 }
 /**
  * Функция для анализа данных продаж
@@ -100,9 +109,40 @@ data.purchase_records.forEach(record => {
     })
 })
 
-    // @TODO: Сортировка продавцов по прибыли
 
-    // @TODO: Назначение премий на основе ранжирования
+    // Сортировка продавцов по прибыли
+    sellerStats.sort((a, b) => b.profit - a.profit
+)
 
-    // @TODO: Подготовка итоговой коллекции с нужными полями
+
+    // Назначение премий на основе ранжирования
+    sellerStats.forEach((seller, index) => {
+        seller.bonus = calculateBonus(
+        index,
+        sellerStats.length,
+        seller
+	)
+seller.top_products = Object
+.entries(seller.products_sold)
+.map(([sku, quantity]) => {
+        return {
+            sku,
+            quantity
+        }
+    })
+.sort((a, b) => b.quantity - a.quantity)
+.slice(0, 10);
+})
+
+    // Подготовка итоговой коллекции с нужными полями
+    return sellerStats.map(seller => ({
+    seller_id: seller.id,
+    name: seller.name,
+    revenue: +seller.revenue.toFixed(2),
+    profit: +seller.profit.toFixed(2),
+    sales_count: seller.sales_count,
+    top_products: seller.top_products,
+    bonus: +seller.bonus.toFixed(2)
+}
+));
 }
